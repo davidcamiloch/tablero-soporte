@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scheme-dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,73 +14,73 @@
   Puedes añadir clases y contenedores, pero no cambies los id: app.js
   depende de ellos.
 -->
-<body>
+<body class="bg-slate-950 text-slate-200 min-h-screen antialiased">
 
-  <header>
-    <h1>Mesa de ayuda</h1>
-    <p>Tickets de soporte de la oficina</p>
+  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur px-4 py-5 md:px-8 text-center">
+    <h1 class="text-2xl font-semibold tracking-tight text-white">Mesa de ayuda</h1>
+    <p class="text-sm text-slate-400 mt-1">Tickets de soporte de la oficina</p>
   </header>
 
-  <main>
+  <main class="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 grid gap-6 lg:grid-cols-3 ">
 
     <!-- Formulario: crea tickets y, desde el nivel 4, también los edita -->
-    <section>
-      <h2 id="titulo-formulario">Nuevo ticket</h2>
+    <section class="bg-slate-900 border border-slate-800 p-5 md:p-6">
+      <h2 id="titulo-formulario" class="text-lg font-semibold text-white mb-4">Nuevo ticket</h2>
 
-      <form id="form-ticket" novalidate>
-        <label for="titulo">Título</label>
-        <input id="titulo" name="titulo" type="text">
-        <p id="error-titulo"></p>
+      <form id="form-ticket" novalidate class="space-y-4">
+        <label for="titulo" class="block text-sm font-medium text-slate-300 mb-1.5">Título</label>
+        <input id="titulo" name="titulo" type="text" class="w-full rounded-lg bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-500 px-3 py-2 text-sm transition focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/40">
+        <p id="error-titulo" class="text-sm text-rose-400 mt-1"></p>
 
-        <label for="descripcion">Descripción</label>
-        <textarea id="descripcion" name="descripcion" rows="3"></textarea>
+        <label for="descripcion" class="block text-sm font-medium text-slate-300 mb-1.5">Descripción</label>
+        <textarea id="descripcion" name="descripcion" rows="3" class="w-full rounded-lg bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-500 px-3 py-2 text-sm transition focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/40"></textarea>
 
-        <label for="solicitante">Solicitante</label>
-        <input id="solicitante" name="solicitante" type="text">
-        <p id="error-solicitante"></p>
+        <label for="solicitante" class="block text-sm font-medium text-slate-300 mb-1.5">Solicitante</label>
+        <input id="solicitante" name="solicitante" type="text" class="w-full rounded-lg bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-500 px-3 py-2 text-sm transition focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/40">
+        <p id="error-solicitante" class="text-sm text-rose-400 mt-1"></p>
 
-        <label for="categoria">Categoría</label>
-        <select id="categoria" name="categoria">
+        <label for="categoria" class="block text-sm font-medium text-slate-300 mb-1.5">Categoría</label>
+        <select id="categoria" name="categoria" class="w-full rounded-lg bg-slate-800 border border-slate-700 text-slate-100 px-3 py-2 text-sm transition focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/40">
           <option value="hardware">Hardware</option>
           <option value="software">Software</option>
           <option value="red">Red</option>
           <option value="accesos">Accesos</option>
         </select>
 
-        <label for="prioridad">Prioridad</label>
-        <select id="prioridad" name="prioridad">
+        <label for="prioridad" class="block text-sm font-medium text-slate-300 mb-1.5">Prioridad</label>
+        <select id="prioridad" name="prioridad" class="w-full rounded-lg bg-slate-800 border border-slate-700 text-slate-100 px-3 py-2 text-sm transition focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/40">
           <option value="baja">Baja</option>
           <option value="media" selected>Media</option>
           <option value="alta">Alta</option>
         </select>
 
-        <button id="btn-guardar" type="submit">Crear ticket</button>
-        <button id="btn-cancelar" type="button" hidden>Cancelar edición</button>
+        <button id="btn-guardar" type="submit" class="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/60 focus:ring-offset-2 focus:ring-offset-slate-900 cursor-pointer">Crear ticket</button>
+        <button id="btn-cancelar" type="button" class="w-full rounded-lg bg-transparent border border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white cursor-pointer" hidden>Cancelar edición</button>
       </form>
     </section>
 
     <!-- Tablero -->
-    <section>
-      <h2>Tickets</h2>
+    <section class="bg-slate-900 border border-slate-800 p-5 md:p-6 lg:col-span-2">
+      <h2 class="text-lg font-semibold text-white mb-4">Tickets</h2>
 
-      <div id="resumen"></div>
+      <div id="resumen" class="flex flex-col gap-3 md:flex-row md:items-end mb-4"></div>
 
-      <div>
-        <label for="filtro-estado">Estado</label>
-        <select id="filtro-estado">
+      <div class="flex flex-col gap-3 md:flex-row md:items-end mb-4">
+        <label for="filtro-estado" class="block text-sm font-medium text-slate-300 mb-1.5">Estado</label>
+        <select id="filtro-estado" class="w-full rounded-lg bg-slate-800 border border-slate-700 text-slate-100 px-3 py-2 text-sm transition focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/40">
           <option value="todos">Todos</option>
           <option value="abierto">Abiertos</option>
           <option value="en_progreso">En progreso</option>
           <option value="resuelto">Resueltos</option>
         </select>
 
-        <label for="busqueda">Buscar</label>
-        <input id="busqueda" type="search" placeholder="Buscar por título">
+        <label for="busqueda" class="block text-sm font-medium text-slate-300 mb-1.5">Buscar</label>
+        <input id="busqueda" type="search" placeholder="Buscar por título" class="w-full rounded-lg bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-500 px-3 py-2 text-sm transition focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/40">
       </div>
 
       <p id="mensaje"></p>
 
-      <div id="lista-tickets"></div>
+      <div id="lista-tickets" class="flex flex-col gap-3 md:flex-row md:items-end mb-4"></div>
     </section>
 
   </main>
