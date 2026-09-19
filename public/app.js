@@ -12,9 +12,9 @@ let tickets = [];
        ========================================================== */
 
 const ESTADOS = {
-  abierto: { etiqueta: 'Abierto', clases: 'bg-sky-500/15 text-sky-300 border-sky-500/30' },
-  en_progreso: { etiqueta: 'En progreso', clases: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
-  resuelto: { etiqueta: 'Resuelto', clases: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
+  abierto: { etiqueta: 'Abierto', clases: 'bg-sky-500/15 text-sky-300 border-sky-500/30', siguiente: 'en_progreso', boton: 'Empezar' },
+  en_progreso: { etiqueta: 'En progreso', clases: 'bg-amber-500/15 text-amber-300 border-amber-500/30', siguiente: 'resuelto', boton: 'Marcar resuelto' },
+  resuelto: { etiqueta: 'Resuelto', clases: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30', siguiente: null, boton: null },
 };
 
 const PRIORIDADES = {
@@ -85,6 +85,9 @@ function pintar() {
 function crearTarjeta(ticket) {
   const tarjeta = document.createElement('article');
   tarjeta.className = 'rounded-xl border border-slate-800 bg-slate-800/50 p-4 flex flex-col gap-3 transition-colors hover:border-slate-700';
+  if (ticket.estado === 'resuelto') {
+    tarjeta.className = 'rounded-xl border border-slate-800/60 bg-slate-900/40 p-4 flex flex-col gap-3 opacity-60';
+  }
 
   const numero = document.createElement('p');
   numero.className = 'text-xs font-mono text-slate-500';
@@ -104,10 +107,25 @@ function crearTarjeta(ticket) {
 
   const badges = document.createElement('div');
   badges.className = 'flex flex-wrap gap-2';
+
+  const acciones = document.createElement('div');
+  acciones.className = 'flex gap-2 mt-auto pt-2 border-t border-slate-800';
+
+  const estado = ESTADOS[ticket.estado];
+
+  if (estado.siguiente) {
+    const btnAvanzar = document.createElement('button');
+    btnAvanzar.type = 'button';
+    btnAvanzar.className = 'rounded-md bg-indigo-600/90 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 transition-colors cursor-pointer';
+    btnAvanzar.textContent = estado.boton;
+    btnAvanzar.addEventListener('click', () => cambiarEstado(ticket, estado.siguiente));
+    acciones.appendChild(btnAvanzar);
+  }
+
   badges.appendChild(crearBadge(PRIORIDADES[ticket.prioridad]));
   badges.appendChild(crearBadge(ESTADOS[ticket.estado]));
 
-  tarjeta.append(numero, titulo, descripcion, detalle, badges);
+  tarjeta.append(numero, titulo, descripcion, detalle, badges, acciones);
   return tarjeta;
 }
 
@@ -192,18 +210,37 @@ async function crearTicket() {
 }
 
 form.addEventListener('submit', (event) => {
-  event.preventDefault();   
+  event.preventDefault();
 
-  if (!validar()) return;  
+  if (!validar()) return;
 
   crearTicket();
 });
 
+/*     ==========================================================
+       PASO 3
+       ========================================================== */
 
+async function cambiarEstado(ticket, nuevoEstado) {
+  try {
+    const respuesta = await fetch(`${API_URL}/${ticket.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ estado: nuevoEstado }),
+    });
 
+    if (!respuesta.ok) {
+      throw new Error(`El servidor respondió ${respuesta.status}`);
+    }
 
-
-
+    const actualizado = await respuesta.json();
+    const indice = tickets.findIndex((t) => t.id === actualizado.id);
+    tickets[indice] = actualizado;
+    pintar();
+  } catch (error) {
+    mostrarMensaje(`No se pudo cambiar el estado (${error.message}).`, "error");
+  }
+}
 
 
 
