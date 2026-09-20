@@ -122,6 +122,13 @@ function crearTarjeta(ticket) {
     acciones.appendChild(btnAvanzar);
   }
 
+  const btnEditar = document.createElement('button');
+  btnEditar.type = 'button';
+  btnEditar.className = 'rounded-sm border border-stone-400 bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-stone-700 hover:bg-stone-100 transition-colors cursor-pointer';
+  btnEditar.textContent = 'Editar';
+  btnEditar.addEventListener('click', () => editarTicket(ticket));
+  acciones.appendChild(btnEditar);
+
   badges.appendChild(crearBadge(PRIORIDADES[ticket.prioridad]));
   badges.appendChild(crearBadge(ESTADOS[ticket.estado]));
 
@@ -214,7 +221,11 @@ form.addEventListener('submit', (event) => {
 
   if (!validar()) return;
 
-  crearTicket();
+  if (idEnEdicion === null) {
+    crearTicket();
+  } else {
+    guardarCambios();
+  }
 });
 
 /*     ==========================================================
@@ -242,6 +253,77 @@ async function cambiarEstado(ticket, nuevoEstado) {
   }
 }
 
+/*     ==========================================================
+       PASO 4
+       ========================================================== */
 
+let idEnEdicion = null;
+
+const tituloFormulario = document.getElementById('titulo-formulario');
+const btnGuardar = document.getElementById('btn-guardar');
+const btnCancelar = document.getElementById('btn-cancelar');
+
+function editarTicket(ticket) {
+  idEnEdicion = ticket.id;
+
+  campoTitulo.value = ticket.titulo;
+  campoDescripcion.value = ticket.descripcion;
+  campoSolicitante.value = ticket.solicitante;
+  campoCategoria.value = ticket.categoria;
+  campoPrioridad.value = ticket.prioridad;
+
+  tituloFormulario.textContent = `Editar ticket #${ticket.id}`;
+  btnGuardar.textContent = 'Guardar cambios';
+  btnCancelar.hidden = false;
+
+  campoTitulo.focus();
+}
+
+function cancelarEdicion() {
+  idEnEdicion = null;
+
+  form.reset();
+  errorTitulo.textContent = "";
+  errorSolicitante.textContent = "";
+
+  tituloFormulario.textContent = 'Nuevo ticket';
+  btnGuardar.textContent = 'Crear ticket';
+  btnCancelar.hidden = true;
+}
+
+async function guardarCambios() {
+  const original = tickets.find((t) => t.id === idEnEdicion);
+
+  const editado = {
+    titulo: campoTitulo.value.trim(),
+    descripcion: campoDescripcion.value.trim(),
+    solicitante: campoSolicitante.value.trim(),
+    categoria: campoCategoria.value,
+    prioridad: campoPrioridad.value,
+    estado: original.estado,
+  };
+
+  try {
+    const respuesta = await fetch(`${API_URL}/${idEnEdicion}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(editado),
+    });
+
+    if (!respuesta.ok) {
+      throw new Error(`El servidor respondió ${respuesta.status}`);
+    }
+
+    const actualizado = await respuesta.json();
+    const indice = tickets.findIndex((t) => t.id === actualizado.id);
+    tickets[indice] = actualizado;
+    pintar();
+    cancelarEdicion();
+  } catch (error) {
+    mostrarMensaje(`No se pudo guardar el ticket (${error.message}).`, "error");
+  }
+}
+
+btnCancelar.addEventListener('click', cancelarEdicion);
 
 cargarTickets();
