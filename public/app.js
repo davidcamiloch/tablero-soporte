@@ -12,15 +12,15 @@ let tickets = [];
        ========================================================== */
 
 const ESTADOS = {
-  abierto: { etiqueta: 'Abierto', clases: 'bg-sky-500/15 text-sky-300 border-sky-500/30', siguiente: 'en_progreso', boton: 'Empezar' },
-  en_progreso: { etiqueta: 'En progreso', clases: 'bg-amber-500/15 text-amber-300 border-amber-500/30', siguiente: 'resuelto', boton: 'Marcar resuelto' },
-  resuelto: { etiqueta: 'Resuelto', clases: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30', siguiente: null, boton: null },
+  abierto: { etiqueta: 'Abierto', clases: 'bg-sky-50 text-sky-800 border-sky-700', siguiente: 'en_progreso', boton: 'Empezar' },
+  en_progreso: { etiqueta: 'En progreso', clases: 'bg-amber-50 text-amber-800 border-amber-600', siguiente: 'resuelto', boton: 'Marcar resuelto' },
+  resuelto: { etiqueta: 'Resuelto', clases: 'bg-green-50 text-green-800 border-green-700', siguiente: null, boton: null },
 };
 
 const PRIORIDADES = {
-  baja: { etiqueta: 'Baja', clases: 'bg-slate-500/15 text-slate-300 border-slate-500/30' },
-  media: { etiqueta: 'Media', clases: 'bg-orange-500/15 text-orange-300 border-orange-500/30' },
-  alta: { etiqueta: 'Alta', clases: 'bg-rose-500/15 text-rose-300 border-rose-500/30' },
+  baja: { etiqueta: 'Baja', clases: 'bg-stone-50 text-stone-600 border-stone-400' },
+  media: { etiqueta: 'Media', clases: 'bg-orange-50 text-orange-800 border-orange-600' },
+  alta: { etiqueta: 'Alta', clases: 'bg-red-50 text-red-800 border-red-700' },
 };
 
 const CATEGORIAS = {
@@ -52,9 +52,9 @@ async function cargarTickets() {
 
 function mostrarMensaje(texto, tipo) {
   const CLASES = {
-    cargando: 'rounded-lg border px-4 py-3 text-sm mb-4 border-slate-700 bg-slate-800/50 text-slate-300',
-    error: 'rounded-lg border px-4 py-3 text-sm mb-4 border-rose-500/30 bg-rose-500/10 text-rose-300',
-    vacio: 'rounded-lg border px-4 py-3 text-sm mb-4 border-slate-700 bg-slate-800/50 text-slate-400',
+    cargando: 'border-l-4 border-stone-400 bg-stone-50 text-stone-600 px-4 py-3 text-sm mb-4',
+    error: 'border-l-4 border-red-600 bg-red-50 text-red-800 px-4 py-3 text-sm mb-4',
+    vacio: 'border-l-4 border-amber-400 bg-amber-50 text-stone-700 px-4 py-3 text-sm mb-4',
   };
 
   if (!texto) {
@@ -84,39 +84,39 @@ function pintar() {
 
 function crearTarjeta(ticket) {
   const tarjeta = document.createElement('article');
-  tarjeta.className = 'rounded-xl border border-slate-800 bg-slate-800/50 p-4 flex flex-col gap-3 transition-colors hover:border-slate-700';
+  tarjeta.className = 'rounded-sm border border-stone-300 bg-white shadow-sm p-4 flex flex-col gap-3 transition-shadow hover:shadow-md';
   if (ticket.estado === 'resuelto') {
-    tarjeta.className = 'rounded-xl border border-slate-800/60 bg-slate-900/40 p-4 flex flex-col gap-3 opacity-60';
+    tarjeta.className = 'rounded-sm border border-stone-200 bg-stone-50 p-4 flex flex-col gap-3 opacity-60';
   }
 
   const numero = document.createElement('p');
-  numero.className = 'text-xs font-mono text-slate-500';
+  numero.className = 'self-start font-mono text-xs font-bold tracking-widest text-stone-500 bg-stone-100 border border-stone-300 px-1.5 py-0.5';
   numero.textContent = `#${ticket.id}`;
 
   const titulo = document.createElement('h3');
-  titulo.className = 'font-semibold text-white leading-snug';
+  titulo.className = 'font-bold text-stone-900 leading-snug';
   titulo.textContent = ticket.titulo;
 
   const descripcion = document.createElement('p');
-  descripcion.className = 'text-sm text-slate-400 leading-relaxed';
+  descripcion.className = 'text-sm text-stone-600 leading-relaxed';
   descripcion.textContent = ticket.descripcion;
 
   const detalle = document.createElement('p');
-  detalle.className = 'text-xs text-slate-500';
+  detalle.className = 'text-xs text-stone-500';
   detalle.textContent = `${ticket.solicitante} · ${CATEGORIAS[ticket.categoria]}`;
 
   const badges = document.createElement('div');
   badges.className = 'flex flex-wrap gap-2';
 
   const acciones = document.createElement('div');
-  acciones.className = 'flex gap-2 mt-auto pt-2 border-t border-slate-800';
+  acciones.className = 'flex gap-2 mt-auto pt-3 border-t border-dashed border-stone-300';
 
   const estado = ESTADOS[ticket.estado];
 
   if (estado.siguiente) {
     const btnAvanzar = document.createElement('button');
     btnAvanzar.type = 'button';
-    btnAvanzar.className = 'rounded-md bg-indigo-600/90 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 transition-colors cursor-pointer';
+    btnAvanzar.className = 'rounded-sm bg-stone-900 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white hover:bg-amber-400 hover:text-stone-900 transition-colors cursor-pointer';
     btnAvanzar.textContent = estado.boton;
     btnAvanzar.addEventListener('click', () => cambiarEstado(ticket, estado.siguiente));
     acciones.appendChild(btnAvanzar);
@@ -131,7 +131,7 @@ function crearTarjeta(ticket) {
 
 function crearBadge(info) {
   const badge = document.createElement('span');
-  badge.className = `inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border ${info.clases}`;
+  badge.className = `inline-flex items-center rounded-sm px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider border-2 ${info.clases}`;
   badge.textContent = info.etiqueta;
   return badge;
 }
