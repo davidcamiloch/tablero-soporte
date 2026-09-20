@@ -129,6 +129,13 @@ function crearTarjeta(ticket) {
   btnEditar.addEventListener('click', () => editarTicket(ticket));
   acciones.appendChild(btnEditar);
 
+  const btnEliminar = document.createElement('button');
+  btnEliminar.type = 'button';
+  btnEliminar.className = 'rounded-sm px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-red-700 hover:bg-red-50 transition-colors cursor-pointer ml-auto';
+  btnEliminar.textContent = 'Eliminar';
+  btnEliminar.addEventListener('click', () => eliminarTicket(ticket));
+  acciones.appendChild(btnEliminar);
+
   badges.appendChild(crearBadge(PRIORIDADES[ticket.prioridad]));
   badges.appendChild(crearBadge(ESTADOS[ticket.estado]));
 
@@ -325,5 +332,35 @@ async function guardarCambios() {
 }
 
 btnCancelar.addEventListener('click', cancelarEdicion);
+
+/*     ==========================================================
+       PASO 5
+       ========================================================== */
+
+async function eliminarTicket(ticket) {
+  const confirmado = confirm(`¿Eliminar el ticket #${ticket.id} "${ticket.titulo}"?`);
+
+  if (!confirmado) return;
+
+  try {
+    const respuesta = await fetch(`${API_URL}/${ticket.id}`, {
+      method: 'DELETE',
+    });
+
+    if (!respuesta.ok) {
+      throw new Error(`El servidor respondió ${respuesta.status}`);
+    }
+
+    tickets = tickets.filter((t) => t.id !== ticket.id);
+
+    if (idEnEdicion === ticket.id) {
+      cancelarEdicion();
+    }
+
+    pintar();
+  } catch (error) {
+    mostrarMensaje(`No se pudo eliminar el ticket (${error.message}).`, "error");
+  }
+}
 
 cargarTickets();
