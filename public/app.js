@@ -12,15 +12,15 @@ let tickets = [];
        ========================================================== */
 
 const ESTADOS = {
-  abierto: { etiqueta: 'Abierto', clases: 'bg-sky-50 text-sky-800 border-sky-700', siguiente: 'en_progreso', boton: 'Empezar' },
-  en_progreso: { etiqueta: 'En progreso', clases: 'bg-amber-50 text-amber-800 border-amber-600', siguiente: 'resuelto', boton: 'Marcar resuelto' },
-  resuelto: { etiqueta: 'Resuelto', clases: 'bg-green-50 text-green-800 border-green-700', siguiente: null, boton: null },
+  abierto: { etiqueta: 'Abierto', clases: 'bg-sky-100 text-sky-800', siguiente: 'en_progreso', boton: 'Empezar' },
+  en_progreso: { etiqueta: 'En progreso', clases: 'bg-amber-100 text-amber-800', siguiente: 'resuelto', boton: 'Marcar resuelto' },
+  resuelto: { etiqueta: 'Resuelto', clases: 'bg-green-100 text-green-800', siguiente: null, boton: null },
 };
 
 const PRIORIDADES = {
-  baja: { etiqueta: 'Baja', clases: 'bg-stone-50 text-stone-600 border-stone-400' },
-  media: { etiqueta: 'Media', clases: 'bg-orange-50 text-orange-800 border-orange-600' },
-  alta: { etiqueta: 'Alta', clases: 'bg-red-50 text-red-800 border-red-700' },
+  baja: { etiqueta: 'Baja', clases: 'bg-gray-200 text-gray-700' },
+  media: { etiqueta: 'Media', clases: 'bg-orange-100 text-orange-800' },
+  alta: { etiqueta: 'Alta', clases: 'bg-red-100 text-red-800' },
 };
 
 const CATEGORIAS = {
@@ -52,9 +52,9 @@ async function cargarTickets() {
 
 function mostrarMensaje(texto, tipo) {
   const CLASES = {
-    cargando: 'border-l-4 border-stone-400 bg-stone-50 text-stone-600 px-4 py-3 text-sm mb-4',
-    error: 'border-l-4 border-red-600 bg-red-50 text-red-800 px-4 py-3 text-sm mb-4',
-    vacio: 'border-l-4 border-amber-400 bg-amber-50 text-stone-700 px-4 py-3 text-sm mb-4',
+    cargando: 'border border-gray-300 bg-gray-50 text-gray-600 rounded p-3 text-sm mb-4',
+    error: 'border border-red-300 bg-red-50 text-red-700 rounded p-3 text-sm mb-4',
+    vacio: 'border border-amber-300 bg-amber-50 text-gray-700 rounded p-3 text-sm mb-4',
   };
 
   if (!texto) {
@@ -69,54 +69,62 @@ function mostrarMensaje(texto, tipo) {
 
 function pintar() {
   lista.innerHTML = "";
+  pintarResumen();
 
   if (tickets.length === 0) {
     mostrarMensaje('No hay tickets todavía. Crea el primero con el formulario.', 'vacio');
     return;
   }
 
+  const visibles = filtrarTickets();
+
+  if (visibles.length === 0) {
+    mostrarMensaje('Ningún ticket coincide con el filtro.', 'vacio');
+    return;
+  }
+
   mostrarMensaje("");
 
-  for (const ticket of tickets) {
+  for (const ticket of visibles) {
     lista.appendChild(crearTarjeta(ticket));
   }
 }
 
 function crearTarjeta(ticket) {
   const tarjeta = document.createElement('article');
-  tarjeta.className = 'rounded-sm border border-stone-300 bg-white shadow-sm p-4 flex flex-col gap-3 transition-shadow hover:shadow-md';
+  tarjeta.className = 'border border-gray-300 rounded p-4 flex flex-col gap-2';
   if (ticket.estado === 'resuelto') {
-    tarjeta.className = 'rounded-sm border border-stone-200 bg-stone-50 p-4 flex flex-col gap-3 opacity-60';
+    tarjeta.className = 'border border-gray-300 rounded p-4 flex flex-col gap-2 bg-gray-100 opacity-75';
   }
 
   const numero = document.createElement('p');
-  numero.className = 'self-start font-mono text-xs font-bold tracking-widest text-stone-500 bg-stone-100 border border-stone-300 px-1.5 py-0.5';
+  numero.className = 'text-xs text-gray-500';
   numero.textContent = `#${ticket.id}`;
 
   const titulo = document.createElement('h3');
-  titulo.className = 'font-bold text-stone-900 leading-snug';
+  titulo.className = 'font-bold text-gray-900';
   titulo.textContent = ticket.titulo;
 
   const descripcion = document.createElement('p');
-  descripcion.className = 'text-sm text-stone-600 leading-relaxed';
+  descripcion.className = 'text-sm text-gray-600';
   descripcion.textContent = ticket.descripcion;
 
   const detalle = document.createElement('p');
-  detalle.className = 'text-xs text-stone-500';
+  detalle.className = 'text-xs text-gray-500';
   detalle.textContent = `${ticket.solicitante} · ${CATEGORIAS[ticket.categoria]}`;
 
   const badges = document.createElement('div');
-  badges.className = 'flex flex-wrap gap-2';
+  badges.className = 'flex gap-2';
 
   const acciones = document.createElement('div');
-  acciones.className = 'flex gap-2 mt-auto pt-3 border-t border-dashed border-stone-300';
+  acciones.className = 'flex gap-2 pt-2 border-t border-gray-200';
 
   const estado = ESTADOS[ticket.estado];
 
   if (estado.siguiente) {
     const btnAvanzar = document.createElement('button');
     btnAvanzar.type = 'button';
-    btnAvanzar.className = 'rounded-sm bg-stone-900 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white hover:bg-amber-400 hover:text-stone-900 transition-colors cursor-pointer';
+    btnAvanzar.className = 'bg-gray-900 rounded px-3 py-1 text-xs font-semibold text-white hover:bg-gray-700 cursor-pointer';
     btnAvanzar.textContent = estado.boton;
     btnAvanzar.addEventListener('click', () => cambiarEstado(ticket, estado.siguiente));
     acciones.appendChild(btnAvanzar);
@@ -124,14 +132,14 @@ function crearTarjeta(ticket) {
 
   const btnEditar = document.createElement('button');
   btnEditar.type = 'button';
-  btnEditar.className = 'rounded-sm border border-stone-400 bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-stone-700 hover:bg-stone-100 transition-colors cursor-pointer';
+  btnEditar.className = 'border border-gray-400 rounded px-3 py-1 text-xs font-semibold text-gray-700 hover:bg-gray-100 cursor-pointer';
   btnEditar.textContent = 'Editar';
   btnEditar.addEventListener('click', () => editarTicket(ticket));
   acciones.appendChild(btnEditar);
 
   const btnEliminar = document.createElement('button');
   btnEliminar.type = 'button';
-  btnEliminar.className = 'rounded-sm px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-red-700 hover:bg-red-50 transition-colors cursor-pointer ml-auto';
+  btnEliminar.className = 'border border-red-400 rounded px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-50 cursor-pointer';
   btnEliminar.textContent = 'Eliminar';
   btnEliminar.addEventListener('click', () => eliminarTicket(ticket));
   acciones.appendChild(btnEliminar);
@@ -145,7 +153,7 @@ function crearTarjeta(ticket) {
 
 function crearBadge(info) {
   const badge = document.createElement('span');
-  badge.className = `inline-flex items-center rounded-sm px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider border-2 ${info.clases}`;
+  badge.className = `inline-block rounded px-2 py-1 text-xs font-semibold ${info.clases}`;
   badge.textContent = info.etiqueta;
   return badge;
 }
@@ -362,5 +370,49 @@ async function eliminarTicket(ticket) {
     mostrarMensaje(`No se pudo eliminar el ticket (${error.message}).`, "error");
   }
 }
+
+/*     ==========================================================
+       PASO 6
+       ========================================================== */
+
+const filtroEstado = document.getElementById('filtro-estado');
+const busqueda = document.getElementById('busqueda');
+const resumen = document.getElementById('resumen');
+
+function filtrarTickets() {
+  const estado = filtroEstado.value;
+  const texto = busqueda.value.trim().toLowerCase();
+
+  return tickets.filter((t) => {
+    const coincideEstado = estado === 'todos' || t.estado === estado;
+    const coincideTexto = t.titulo.toLowerCase().includes(texto);
+    return coincideEstado && coincideTexto;
+  });
+}
+
+function pintarResumen() {
+  const porEstado = tickets.reduce((conteo, t) => {
+    conteo[t.estado] = (conteo[t.estado] || 0) + 1;
+    return conteo;
+  }, {});
+
+  const altasPendientes = tickets.filter((t) => t.prioridad === 'alta' && t.estado !== 'resuelto').length;
+
+  resumen.innerHTML = "";
+  resumen.appendChild(crearChip('Abiertos', porEstado.abierto || 0, 'border-gray-300 text-gray-600'));
+  resumen.appendChild(crearChip('En progreso', porEstado.en_progreso || 0, 'border-gray-300 text-gray-600'));
+  resumen.appendChild(crearChip('Resueltos', porEstado.resuelto || 0, 'border-gray-300 text-gray-600'));
+  resumen.appendChild(crearChip('Alta sin resolver', altasPendientes, 'border-red-300 bg-red-50 text-red-700'));
+}
+
+function crearChip(etiqueta, cantidad, clases) {
+  const chip = document.createElement('span');
+  chip.className = `border rounded px-3 py-1 text-xs ${clases}`;
+  chip.textContent = `${cantidad} ${etiqueta}`;
+  return chip;
+}
+
+filtroEstado.addEventListener('change', pintar);
+busqueda.addEventListener('input', pintar);
 
 cargarTickets();

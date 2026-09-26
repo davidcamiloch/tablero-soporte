@@ -14,68 +14,68 @@
   Puedes añadir clases y contenedores, pero no cambies los id: app.js
   depende de ellos.
 -->
-<body class="bg-stone-100 text-stone-800 min-h-screen antialiased">
+<body class="bg-gray-100 text-gray-800 min-h-screen">
 
-  <header class="bg-stone-900 border-b-4 border-amber-400 px-4 py-5 md:px-8 text-center">
-    <h1 class="text-xl md:text-2xl font-black uppercase tracking-[0.2em] text-amber-400">Mesa de ayuda</h1>
-    <p class="text-sm text-stone-400 mt-1">Tickets de soporte de la oficina</p>
+  <header class="bg-gray-900 border-b-4 border-amber-400 p-5 text-center">
+    <h1 class="text-2xl font-bold text-amber-400">Mesa de ayuda</h1>
+    <p class="text-sm text-gray-400 mt-1">Tickets de soporte de la oficina</p>
   </header>
 
-  <main class="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 grid gap-6 lg:grid-cols-3">
+  <main class="max-w-7xl mx-auto p-4 md:p-8 grid gap-6 lg:grid-cols-3">
 
     <!-- Formulario: crea tickets y, desde el nivel 4, también los edita -->
-    <section class="bg-white border border-stone-300 border-t-4 border-t-amber-400 rounded-sm shadow-sm p-5 md:p-6 self-start">
-      <h2 id="titulo-formulario" class="text-base font-bold uppercase tracking-wider text-stone-900 mb-4 pb-2 border-b border-stone-200">Nuevo ticket</h2>
+    <section class="bg-white border border-gray-300 rounded p-6">
+      <h2 id="titulo-formulario" class="text-lg font-bold text-gray-900 mb-4">Nuevo ticket</h2>
 
       <form id="form-ticket" novalidate class="space-y-4">
-        <label for="titulo" class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1.5">Título</label>
-        <input id="titulo" name="titulo" type="text" class="w-full rounded-sm bg-stone-50 border border-stone-300 text-stone-900 placeholder-stone-400 px-3 py-2 text-sm transition focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-2 focus:ring-amber-200">
-        <p id="error-titulo" class="text-sm text-rose-400 mt-1"></p>
+        <label for="titulo" class="block text-sm font-semibold text-gray-600 mb-1">Título</label>
+        <input id="titulo" name="titulo" type="text" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-300">
+        <p id="error-titulo" class="text-sm text-red-600 mt-1"></p>
 
-        <label for="descripcion" class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1.5">Descripción</label>
-        <textarea id="descripcion" name="descripcion" rows="3" class="w-full rounded-sm bg-stone-50 border border-stone-300 text-stone-900 placeholder-stone-400 px-3 py-2 text-sm transition focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-2 focus:ring-amber-200"></textarea>
+        <label for="descripcion" class="block text-sm font-semibold text-gray-600 mb-1">Descripción</label>
+        <textarea id="descripcion" name="descripcion" rows="3" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-300"></textarea>
 
-        <label for="solicitante" class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1.5">Solicitante</label>
-        <input id="solicitante" name="solicitante" type="text" class="w-full rounded-sm bg-stone-50 border border-stone-300 text-stone-900 placeholder-stone-400 px-3 py-2 text-sm transition focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-2 focus:ring-amber-200">
-        <p id="error-solicitante" class="text-sm text-rose-400 mt-1"></p>
+        <label for="solicitante" class="block text-sm font-semibold text-gray-600 mb-1">Solicitante</label>
+        <input id="solicitante" name="solicitante" type="text" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-300">
+        <p id="error-solicitante" class="text-sm text-red-600 mt-1"></p>
 
-        <label for="categoria" class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1.5">Categoría</label>
-        <select id="categoria" name="categoria" class="w-full rounded-sm bg-stone-50 border border-stone-300 text-stone-900 px-3 py-2 text-sm transition focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-2 focus:ring-amber-200">
+        <label for="categoria" class="block text-sm font-semibold text-gray-600 mb-1">Categoría</label>
+        <select id="categoria" name="categoria" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-300">
           <option value="hardware">Hardware</option>
           <option value="software">Software</option>
           <option value="red">Red</option>
           <option value="accesos">Accesos</option>
         </select>
 
-        <label for="prioridad" class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1.5">Prioridad</label>
-        <select id="prioridad" name="prioridad" class="w-full rounded-sm bg-stone-50 border border-stone-300 text-stone-900 px-3 py-2 text-sm transition focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-2 focus:ring-amber-200">
+        <label for="prioridad" class="block text-sm font-semibold text-gray-600 mb-1">Prioridad</label>
+        <select id="prioridad" name="prioridad" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-300">
           <option value="baja">Baja</option>
           <option value="media" selected>Media</option>
           <option value="alta">Alta</option>
         </select>
 
-        <button id="btn-guardar" type="submit" class="w-full rounded-sm bg-stone-900 px-4 py-2.5 text-sm font-bold uppercase tracking-wide text-amber-400 transition-colors hover:bg-amber-400 hover:text-stone-900 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 cursor-pointer">Crear ticket</button>
-        <button id="btn-cancelar" type="button" class="w-full rounded-sm bg-white border border-stone-400 px-4 py-2.5 text-sm font-semibold text-stone-700 transition-colors hover:bg-stone-100 hover:border-stone-500 cursor-pointer" hidden>Cancelar edición</button>
+        <button id="btn-guardar" type="submit" class="w-full bg-gray-900 rounded px-4 py-2 text-sm font-bold text-amber-400 hover:bg-gray-700 cursor-pointer">Crear ticket</button>
+        <button id="btn-cancelar" type="button" class="w-full border border-gray-400 rounded px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 cursor-pointer" hidden>Cancelar edición</button>
       </form>
     </section>
 
     <!-- Tablero -->
-    <section class="bg-white border border-stone-300 border-t-4 border-t-stone-900 rounded-sm shadow-sm p-5 md:p-6 lg:col-span-2">
-      <h2 class="text-base font-bold uppercase tracking-wider text-stone-900 mb-4 pb-2 border-b border-stone-200">Tickets</h2>
+    <section class="bg-white border border-gray-300 rounded p-6 lg:col-span-2">
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Tickets</h2>
 
-      <div id="resumen" class="flex flex-col gap-3 md:flex-row md:items-end mb-4"></div>
+      <div id="resumen" class="flex flex-wrap gap-2 mb-4"></div>
 
       <div class="flex flex-col gap-3 md:flex-row md:items-end mb-4">
-        <label for="filtro-estado" class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1.5">Estado</label>
-        <select id="filtro-estado" class="w-full rounded-sm bg-stone-50 border border-stone-300 text-stone-900 px-3 py-2 text-sm transition focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-2 focus:ring-amber-200">
+        <label for="filtro-estado" class="block text-sm font-semibold text-gray-600 mb-1">Estado</label>
+        <select id="filtro-estado" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-300">
           <option value="todos">Todos</option>
           <option value="abierto">Abiertos</option>
           <option value="en_progreso">En progreso</option>
           <option value="resuelto">Resueltos</option>
         </select>
 
-        <label for="busqueda" class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1.5">Buscar</label>
-        <input id="busqueda" type="search" placeholder="Buscar por título" class="w-full rounded-sm bg-stone-50 border border-stone-300 text-stone-900 placeholder-stone-400 px-3 py-2 text-sm transition focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-2 focus:ring-amber-200">
+        <label for="busqueda" class="block text-sm font-semibold text-gray-600 mb-1">Buscar</label>
+        <input id="busqueda" type="search" placeholder="Buscar por título" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-300">
       </div>
 
       <p id="mensaje" hidden></p>
