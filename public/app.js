@@ -23,6 +23,12 @@ const PRIORIDADES = {
   alta: { etiqueta: 'Alta', clases: 'bg-red-100 text-red-800' },
 };
 
+const ORDEN_PRIORIDAD = {
+  alta: 1,
+  media: 2,
+  baja: 3,
+};
+
 const CATEGORIAS = {
   hardware: 'Hardware',
   software: 'Software',
@@ -77,6 +83,7 @@ function pintar() {
   }
 
   const visibles = filtrarTickets();
+  visibles.sort((a, b) => ORDEN_PRIORIDAD[a.prioridad] - ORDEN_PRIORIDAD[b.prioridad]);
 
   if (visibles.length === 0) {
     mostrarMensaje('Ningún ticket coincide con el filtro.', 'vacio');
@@ -128,6 +135,15 @@ function crearTarjeta(ticket) {
     btnAvanzar.textContent = estado.boton;
     btnAvanzar.addEventListener('click', () => cambiarEstado(ticket, estado.siguiente));
     acciones.appendChild(btnAvanzar);
+  }
+
+  if (ticket.estado === 'resuelto') {
+    const btnReabrir = document.createElement('button');
+    btnReabrir.type = 'button';
+    btnReabrir.className = 'border border-gray-400 rounded px-3 py-1 text-xs font-semibold text-gray-700 hover:bg-gray-100 cursor-pointer';
+    btnReabrir.textContent = 'Reabrir';
+    btnReabrir.addEventListener('click', () => cambiarEstado(ticket, 'abierto'));
+    acciones.appendChild(btnReabrir);
   }
 
   const btnEditar = document.createElement('button');
